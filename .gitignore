@@ -1,0 +1,13 @@
+# Executables
+smart_parking_lot_manager
+*.exe
+*.out
+*.app
+
+# Object files
+*.o
+*.obj
+
+# OS generated files
+.DS_Store
+*.swp
