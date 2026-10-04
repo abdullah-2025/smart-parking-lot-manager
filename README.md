@@ -1,4 +1,4 @@
-# Smart Parking Lot Manager 🚗🅿️
+# Smart Parking Lot Manager 🚗
 
 [![Language: C++11](https://img.shields.io/badge/Language-C%2B%2B11-blue.svg)](https://isocpp.org/)
 [![Course: DSA](https://img.shields.io/badge/Course-Data%20Structures%20%26%20Algorithms-orange.svg)](#)
