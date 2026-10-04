@@ -14,6 +14,8 @@
 #include <cctype>
 #include <limits>
 
+using namespace std;
+
 // ----------------------------------------------------------------------------
 // CONSTANTS & STRUCTURES
 // ----------------------------------------------------------------------------
@@ -69,18 +71,18 @@ int historyCount = 0;
 // Task 6 Helper - Student banner displayed at launch and above every main menu
 // Time Complexity: O(1)
 void printBanner() {
-    std::cout << "\n============================================================\n";
-    std::cout << "               SMART PARKING LOT MANAGER\n";
-    std::cout << "             Author: M Abdullah Khan\n";
-    std::cout << "             Registration No: 2312280\n";
-    std::cout << "============================================================\n";
+    cout << "\n============================================================\n";
+    cout << "               SMART PARKING LOT MANAGER\n";
+    cout << "             Author: M Abdullah Khan\n";
+    cout << "             Registration No: 2312280\n";
+    cout << "============================================================\n";
 }
 
 // Helper - Clear input stream after errors or invalid inputs
 // Time Complexity: O(1)
 void clearInputBuffer() {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
 // Helper - Formats and prints time as HH:MM
@@ -88,10 +90,10 @@ void clearInputBuffer() {
 void printFormattedTime(int t) {
     int hh = t / 100;
     int mm = t % 100;
-    if (hh < 10) std::cout << '0';
-    std::cout << hh << ':';
-    if (mm < 10) std::cout << '0';
-    std::cout << mm;
+    if (hh < 10) cout << '0';
+    cout << hh << ':';
+    if (mm < 10) cout << '0';
+    cout << mm;
 }
 
 // Helper - Returns readable vehicle type name
@@ -128,16 +130,16 @@ int readInt(const char* prompt, int minVal, int maxVal) {
     int val;
     while (true) {
         if (prompt != nullptr && prompt[0] != '\0') {
-            std::cout << prompt;
+            cout << prompt;
         }
-        if (std::cin >> val) {
+        if (cin >> val) {
             clearInputBuffer();
             if (val >= minVal && val <= maxVal) {
                 return val;
             }
-            std::cout << "  [Error] Value must be between " << minVal << " and " << maxVal << ".\n";
+            cout << "  [Error] Value must be between " << minVal << " and " << maxVal << ".\n";
         } else {
-            std::cout << "  [Error] Invalid input. Please enter an integer.\n";
+            cout << "  [Error] Invalid input. Please enter an integer.\n";
             clearInputBuffer();
         }
     }
@@ -147,8 +149,8 @@ int readInt(const char* prompt, int minVal, int maxVal) {
 // Time Complexity: O(length)
 bool readPlate(char dest[11], const char* prompt) {
     char buffer[128];
-    std::cout << prompt;
-    if (!std::cin.getline(buffer, sizeof(buffer))) {
+    cout << prompt;
+    if (!cin.getline(buffer, sizeof(buffer))) {
         clearInputBuffer();
         return false;
     }
@@ -156,22 +158,22 @@ bool readPlate(char dest[11], const char* prompt) {
     int start = 0;
     while (buffer[start] == ' ' || buffer[start] == '\t') start++;
     // Trim trailing whitespace
-    int end = static_cast<int>(std::strlen(buffer)) - 1;
+    int end = static_cast<int>(strlen(buffer)) - 1;
     while (end >= start && (buffer[end] == ' ' || buffer[end] == '\t' || buffer[end] == '\r' || buffer[end] == '\n')) {
         end--;
     }
     int len = end - start + 1;
     if (len < 4 || len > 10) {
-        std::cout << "  [Error] Plate must be 4 to 10 alphanumeric characters (no spaces).\n";
+        cout << "  [Error] Plate must be 4 to 10 alphanumeric characters (no spaces).\n";
         return false;
     }
     for (int i = 0; i < len; ++i) {
         char ch = buffer[start + i];
-        if (!std::isalnum(static_cast<unsigned char>(ch))) {
-            std::cout << "  [Error] Plate contains invalid character '" << ch << "'. Only letters and digits allowed.\n";
+        if (!isalnum(static_cast<unsigned char>(ch))) {
+            cout << "  [Error] Plate contains invalid character '" << ch << "'. Only letters and digits allowed.\n";
             return false;
         }
-        dest[i] = static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
+        dest[i] = static_cast<char>(toupper(static_cast<unsigned char>(ch)));
     }
     dest[len] = '\0';
     return true;
@@ -181,33 +183,33 @@ bool readPlate(char dest[11], const char* prompt) {
 // Time Complexity: O(1)
 bool readTime(int &timeVal, const char* prompt) {
     char buffer[64];
-    std::cout << prompt;
-    if (!std::cin.getline(buffer, sizeof(buffer))) {
+    cout << prompt;
+    if (!cin.getline(buffer, sizeof(buffer))) {
         clearInputBuffer();
         return false;
     }
     int start = 0;
     while (buffer[start] == ' ' || buffer[start] == '\t') start++;
-    int end = static_cast<int>(std::strlen(buffer)) - 1;
+    int end = static_cast<int>(strlen(buffer)) - 1;
     while (end >= start && (buffer[end] == ' ' || buffer[end] == '\t' || buffer[end] == '\r' || buffer[end] == '\n')) {
         end--;
     }
     int len = end - start + 1;
     if (len < 3 || len > 4) {
-        std::cout << "  [Error] Time must be 3 or 4 digits in HHMM format (e.g. 0945 or 1430).\n";
+        cout << "  [Error] Time must be 3 or 4 digits in HHMM format (e.g. 0945 or 1430).\n";
         return false;
     }
     int val = 0;
     for (int i = 0; i < len; ++i) {
         char ch = buffer[start + i];
-        if (!std::isdigit(static_cast<unsigned char>(ch))) {
-            std::cout << "  [Error] Time must contain digits only.\n";
+        if (!isdigit(static_cast<unsigned char>(ch))) {
+            cout << "  [Error] Time must contain digits only.\n";
             return false;
         }
         val = val * 10 + (ch - '0');
     }
     if (!isValidTime(val)) {
-        std::cout << "  [Error] Invalid time (" << val << "). Hours must be 00-23 and minutes 00-59.\n";
+        cout << "  [Error] Invalid time (" << val << "). Hours must be 00-23 and minutes 00-59.\n";
         return false;
     }
     timeVal = val;
@@ -218,7 +220,7 @@ bool readTime(int &timeVal, const char* prompt) {
 // Time Complexity: O(n)
 int findPlateIndex(const Vehicle arr[], int n, const char* plate) {
     for (int i = 0; i < n; ++i) {
-        if (std::strcmp(arr[i].plate, plate) == 0) {
+        if (strcmp(arr[i].plate, plate) == 0) {
             return i;
         }
     }
@@ -229,7 +231,7 @@ int findPlateIndex(const Vehicle arr[], int n, const char* plate) {
 // Time Complexity: O(n)
 bool isSortedByPlate(const Vehicle arr[], int n) {
     for (int i = 0; i < n - 1; ++i) {
-        if (std::strcmp(arr[i].plate, arr[i + 1].plate) > 0) {
+        if (strcmp(arr[i].plate, arr[i + 1].plate) > 0) {
             return false;
         }
     }
@@ -271,16 +273,16 @@ void releaseSlot(int slot) {
 // Bonus 1 - Display all currently available free slot numbers
 // Time Complexity: O(freeCount)
 void showFreeSlots() {
-    std::cout << "\n--- Available Free Slots (" << freeCount << " total) ---\n";
+    cout << "\n--- Available Free Slots (" << freeCount << " total) ---\n";
     if (freeCount == 0) {
-        std::cout << "No free slots available (Parking lot is 100% full).\n";
+        cout << "No free slots available (Parking lot is 100% full).\n";
         return;
     }
     for (int i = 0; i < freeCount; ++i) {
-        std::cout << std::setw(3) << freeSlots[i] << " ";
-        if ((i + 1) % 15 == 0) std::cout << "\n";
+        cout << setw(3) << freeSlots[i] << " ";
+        if ((i + 1) % 15 == 0) cout << "\n";
     }
-    std::cout << "\n";
+    cout << "\n";
 }
 
 // ----------------------------------------------------------------------------
@@ -318,27 +320,27 @@ bool calculateFee(int entryTime, int exitTime, int type, int &durationHours, int
 // Task 6 - Show parking lot contents in an aligned ASCII table
 // Time Complexity: O(n)
 void showLot(const Vehicle arr[], int n, const char* title = "MAIN PARKING LOT") {
-    std::cout << "\n============================================================\n";
-    std::cout << "                " << title << "\n";
-    std::cout << "============================================================\n";
-    std::cout << "+-----+------+------------+------------+---------+\n";
-    std::cout << "| Pos | Slot | Plate      | Entry Time | Type    |\n";
-    std::cout << "+-----+------+------------+------------+---------+\n";
+    cout << "\n============================================================\n";
+    cout << "                " << title << "\n";
+    cout << "============================================================\n";
+    cout << "+-----+------+------------+------------+---------+\n";
+    cout << "| Pos | Slot | Plate      | Entry Time | Type    |\n";
+    cout << "+-----+------+------------+------------+---------+\n";
     if (n == 0) {
-        std::cout << "|              Parking lot is currently empty.             |\n";
-        std::cout << "+-----+------+------------+------------+---------+\n";
+        cout << "|              Parking lot is currently empty.             |\n";
+        cout << "+-----+------+------------+------------+---------+\n";
     } else {
         for (int i = 0; i < n; ++i) {
-            std::cout << "| " << std::setw(3) << (i + 1) << " | "
-                      << std::setw(4) << arr[i].slotNo << " | "
-                      << std::left << std::setw(10) << arr[i].plate << std::right << " | ";
+            cout << "| " << setw(3) << (i + 1) << " | "
+                      << setw(4) << arr[i].slotNo << " | "
+                      << left << setw(10) << arr[i].plate << right << " | ";
             printFormattedTime(arr[i].entryTime);
-            std::cout << "      | "
-                      << std::left << std::setw(7) << getTypeName(arr[i].type) << std::right << " |\n";
+            cout << "      | "
+                      << left << setw(7) << getTypeName(arr[i].type) << right << " |\n";
         }
-        std::cout << "+-----+------+------------+------------+---------+\n";
+        cout << "+-----+------+------------+------------+---------+\n";
     }
-    std::cout << "Occupancy: " << n << " / " << MAX_LOT << " occupied | Free slots: " << (MAX_LOT - n) << "\n";
+    cout << "Occupancy: " << n << " / " << MAX_LOT << " occupied | Free slots: " << (MAX_LOT - n) << "\n";
 }
 
 // ----------------------------------------------------------------------------
@@ -355,7 +357,7 @@ void insertionSortByPlate(Vehicle arr[], int n, bool printDetails = true) {
         int j = i - 1;
         while (j >= 0) {
             comparisons++;
-            if (std::strcmp(arr[j].plate, key.plate) > 0) {
+            if (strcmp(arr[j].plate, key.plate) > 0) {
                 arr[j + 1] = arr[j];
                 shifts++;
                 j--;
@@ -366,9 +368,9 @@ void insertionSortByPlate(Vehicle arr[], int n, bool printDetails = true) {
         arr[j + 1] = key;
     }
     if (printDetails) {
-        std::cout << "\n[Insertion Sort Completed]\n";
-        std::cout << "Sorted by: License Plate (A-Z)\n";
-        std::cout << "Comparisons: " << comparisons << " | Shifts: " << shifts << "\n";
+        cout << "\n[Insertion Sort Completed]\n";
+        cout << "Sorted by: License Plate (A-Z)\n";
+        cout << "Comparisons: " << comparisons << " | Shifts: " << shifts << "\n";
         showLot(arr, n, "LOT AFTER INSERTION SORT (BY PLATE)");
     }
 }
@@ -393,9 +395,9 @@ void selectionSortByEntryTime(Vehicle arr[], int n) {
             swaps++;
         }
     }
-    std::cout << "\n[Selection Sort Completed]\n";
-    std::cout << "Sorted by: Entry Time (Earliest to Latest)\n";
-    std::cout << "Comparisons: " << comparisons << " | Swaps: " << swaps << "\n";
+    cout << "\n[Selection Sort Completed]\n";
+    cout << "Sorted by: Entry Time (Earliest to Latest)\n";
+    cout << "Comparisons: " << comparisons << " | Swaps: " << swaps << "\n";
     showLot(arr, n, "LOT AFTER SELECTION SORT (BY ENTRY TIME)");
 }
 
@@ -456,8 +458,8 @@ void stableBubbleSortByTypeAndTime(Vehicle arr[], int n) {
             if (arr[p].type == arr[q].type && arr[p].entryTime == arr[q].entryTime) {
                 int origP = -1, origQ = -1;
                 for (int k = 0; k < snapCount; ++k) {
-                    if (origP == -1 && std::strcmp(snapshot[k].plate, arr[p].plate) == 0) origP = k;
-                    if (origQ == -1 && std::strcmp(snapshot[k].plate, arr[q].plate) == 0) origQ = k;
+                    if (origP == -1 && strcmp(snapshot[k].plate, arr[p].plate) == 0) origP = k;
+                    if (origQ == -1 && strcmp(snapshot[k].plate, arr[q].plate) == 0) origQ = k;
                 }
                 if (origP > origQ) {
                     isStable = false;
@@ -466,13 +468,13 @@ void stableBubbleSortByTypeAndTime(Vehicle arr[], int n) {
         }
     }
 
-    std::cout << "\n[Stable Bubble Sort Completed]\n";
-    std::cout << "Sorted by: Vehicle Type (1->2->3), then Entry Time (HHMM)\n";
-    std::cout << "Comparisons: " << comparisons << " | Swaps: " << swaps << "\n";
+    cout << "\n[Stable Bubble Sort Completed]\n";
+    cout << "Sorted by: Vehicle Type (1->2->3), then Entry Time (HHMM)\n";
+    cout << "Comparisons: " << comparisons << " | Swaps: " << swaps << "\n";
     if (sortedCorrectly && isStable) {
-        std::cout << "Stability check: PASS\n";
+        cout << "Stability check: PASS\n";
     } else {
-        std::cout << "Stability check: FAIL\n";
+        cout << "Stability check: FAIL\n";
     }
     showLot(arr, n, "LOT AFTER BUBBLE SORT (TYPE THEN TIME)");
 }
@@ -486,7 +488,7 @@ void stableBubbleSortByTypeAndTime(Vehicle arr[], int n) {
 bool prepareNewVehicle(Vehicle &v) {
     // Task 1e: Reject if lot is full
     if (lotCount >= MAX_LOT) {
-        std::cout << "\n[Error] Parking lot is full (60/60 occupied)! Cannot park vehicle.\n";
+        cout << "\n[Error] Parking lot is full (60/60 occupied)! Cannot park vehicle.\n";
         return false;
     }
     // Read plate
@@ -497,7 +499,7 @@ bool prepareNewVehicle(Vehicle &v) {
     // Task 1e: Reject duplicate plate
     int dupIdx = findPlateIndex(lot, lotCount, tempPlate);
     if (dupIdx != -1) {
-        std::cout << "\n[Error] Duplicate plate! Vehicle " << tempPlate
+        cout << "\n[Error] Duplicate plate! Vehicle " << tempPlate
                   << " is already parked at position " << (dupIdx + 1)
                   << " (Slot " << lot[dupIdx].slotNo << "). Insertion rejected.\n";
         return false;
@@ -508,21 +510,21 @@ bool prepareNewVehicle(Vehicle &v) {
         return false;
     }
     // Read vehicle type
-    std::cout << "Select vehicle type:\n";
-    std::cout << "  1. Bike  ($10/hr)\n";
-    std::cout << "  2. Car   ($20/hr)\n";
-    std::cout << "  3. Truck ($40/hr)\n";
+    cout << "Select vehicle type:\n";
+    cout << "  1. Bike  ($10/hr)\n";
+    cout << "  2. Car   ($20/hr)\n";
+    cout << "  3. Truck ($40/hr)\n";
     int tempType = readInt("Enter type (1-3): ", 1, 3);
 
     // Allocate physical slot from sorted free slots (Bonus 1)
     int allocatedSlot = allocateLowestSlot();
     if (allocatedSlot == -1) {
-        std::cout << "\n[Error] No physical slots available.\n";
+        cout << "\n[Error] No physical slots available.\n";
         return false;
     }
 
     v.slotNo = allocatedSlot;
-    std::strcpy(v.plate, tempPlate);
+    strcpy(v.plate, tempPlate);
     v.entryTime = tempTime;
     v.type = tempType;
     return true;
@@ -535,7 +537,7 @@ void parkAtEnd() {
     if (!prepareNewVehicle(v)) return;
     lot[lotCount] = v;
     lotCount++;
-    std::cout << "\n[Success] Vehicle " << v.plate << " parked at position " << lotCount
+    cout << "\n[Success] Vehicle " << v.plate << " parked at position " << lotCount
               << " in physical Slot " << v.slotNo << ".\n";
 }
 
@@ -549,7 +551,7 @@ void parkAtFrontVIP() {
     }
     lot[0] = v;
     lotCount++;
-    std::cout << "\n[Success] VIP Vehicle " << v.plate << " inserted at FRONT (position 1) in physical Slot "
+    cout << "\n[Success] VIP Vehicle " << v.plate << " inserted at FRONT (position 1) in physical Slot "
               << v.slotNo << ".\n";
 }
 
@@ -557,10 +559,10 @@ void parkAtFrontVIP() {
 // Time Complexity: O(n) shifts
 void parkAtPosition() {
     if (lotCount >= MAX_LOT) {
-        std::cout << "\n[Error] Parking lot is full (60/60 occupied)!\n";
+        cout << "\n[Error] Parking lot is full (60/60 occupied)!\n";
         return;
     }
-    std::cout << "Enter target position (1 to " << (lotCount + 1) << "): ";
+    cout << "Enter target position (1 to " << (lotCount + 1) << "): ";
     int pos = readInt("", 1, lotCount + 1);
     Vehicle v;
     if (!prepareNewVehicle(v)) return;
@@ -570,7 +572,7 @@ void parkAtPosition() {
     }
     lot[targetIdx] = v;
     lotCount++;
-    std::cout << "\n[Success] Vehicle " << v.plate << " parked at position " << pos
+    cout << "\n[Success] Vehicle " << v.plate << " parked at position " << pos
               << " in physical Slot " << v.slotNo << ".\n";
 }
 
@@ -578,18 +580,18 @@ void parkAtPosition() {
 // Time Complexity: O(n) comparisons and shifts
 void parkSortedByPlate() {
     if (lotCount >= MAX_LOT) {
-        std::cout << "\n[Error] Parking lot is full (60/60 occupied)!\n";
+        cout << "\n[Error] Parking lot is full (60/60 occupied)!\n";
         return;
     }
     // Check if array is currently sorted by plate
     if (!isSortedByPlate(lot, lotCount)) {
-        std::cout << "\n[Warning] The lot array is not currently sorted by license plate.\n";
-        std::cout << "Would you like to run Insertion Sort first? (1 = Yes, 0 = Cancel): ";
+        cout << "\n[Warning] The lot array is not currently sorted by license plate.\n";
+        cout << "Would you like to run Insertion Sort first? (1 = Yes, 0 = Cancel): ";
         int choice = readInt("", 0, 1);
         if (choice == 1) {
             insertionSortByPlate(lot, lotCount, true);
         } else {
-            std::cout << "Sorted insertion cancelled.\n";
+            cout << "Sorted insertion cancelled.\n";
             return;
         }
     }
@@ -597,7 +599,7 @@ void parkSortedByPlate() {
     if (!prepareNewVehicle(v)) return;
     // Find correct insertion index
     int insertIdx = 0;
-    while (insertIdx < lotCount && std::strcmp(lot[insertIdx].plate, v.plate) < 0) {
+    while (insertIdx < lotCount && strcmp(lot[insertIdx].plate, v.plate) < 0) {
         insertIdx++;
     }
     // Shift elements right
@@ -606,7 +608,7 @@ void parkSortedByPlate() {
     }
     lot[insertIdx] = v;
     lotCount++;
-    std::cout << "\n[Success] Vehicle " << v.plate << " inserted at sorted position " << (insertIdx + 1)
+    cout << "\n[Success] Vehicle " << v.plate << " inserted at sorted position " << (insertIdx + 1)
               << " in physical Slot " << v.slotNo << ".\n";
 }
 
@@ -618,14 +620,14 @@ void parkSortedByPlate() {
 // Time Complexity: O(1)
 void logExitHistory(const Vehicle &v, int exitTime, int fee) {
     if (historyCount < MAX_HISTORY) {
-        std::strcpy(history[historyCount].plate, v.plate);
+        strcpy(history[historyCount].plate, v.plate);
         history[historyCount].type = v.type;
         history[historyCount].entryTime = v.entryTime;
         history[historyCount].exitTime = exitTime;
         history[historyCount].fee = fee;
         historyCount++;
     } else {
-        std::cout << "  [Warning] Exit history log is full (" << MAX_HISTORY << " records). Logging stopped.\n";
+        cout << "  [Warning] Exit history log is full (" << MAX_HISTORY << " records). Logging stopped.\n";
     }
 }
 
@@ -633,10 +635,10 @@ void logExitHistory(const Vehicle &v, int exitTime, int fee) {
 // Time Complexity: O(n) shifts
 void exitByPosition() {
     if (lotCount == 0) {
-        std::cout << "\n[Error] Parking lot is empty. No vehicle to exit.\n";
+        cout << "\n[Error] Parking lot is empty. No vehicle to exit.\n";
         return;
     }
-    std::cout << "Enter position of exiting vehicle (1 to " << lotCount << "): ";
+    cout << "Enter position of exiting vehicle (1 to " << lotCount << "): ";
     int pos = readInt("", 1, lotCount);
     int idx = pos - 1;
     Vehicle target = lot[idx];
@@ -647,26 +649,26 @@ void exitByPosition() {
     }
     int hours = 0, fee = 0;
     if (!calculateFee(target.entryTime, exitTime, target.type, hours, fee)) {
-        std::cout << "\n[Error] Exit time (";
+        cout << "\n[Error] Exit time (";
         printFormattedTime(exitTime);
-        std::cout << ") cannot be earlier than entry time (";
+        cout << ") cannot be earlier than entry time (";
         printFormattedTime(target.entryTime);
-        std::cout << "). Exit cancelled.\n";
+        cout << "). Exit cancelled.\n";
         return;
     }
 
     // Bill receipt
-    std::cout << "\n============================================\n";
-    std::cout << "             PARKING RECEIPT\n";
-    std::cout << "============================================\n";
-    std::cout << "Plate:         " << target.plate << "\n";
-    std::cout << "Slot Number:   " << target.slotNo << "\n";
-    std::cout << "Vehicle Type:  " << getTypeName(target.type) << "\n";
-    std::cout << "Entry Time:    "; printFormattedTime(target.entryTime); std::cout << "\n";
-    std::cout << "Exit Time:     "; printFormattedTime(exitTime); std::cout << "\n";
-    std::cout << "Billed Hours:  " << hours << " hour(s) (rounded up, min 1 hr)\n";
-    std::cout << "Total Fee:     $" << fee << "\n";
-    std::cout << "============================================\n";
+    cout << "\n============================================\n";
+    cout << "             PARKING RECEIPT\n";
+    cout << "============================================\n";
+    cout << "Plate:         " << target.plate << "\n";
+    cout << "Slot Number:   " << target.slotNo << "\n";
+    cout << "Vehicle Type:  " << getTypeName(target.type) << "\n";
+    cout << "Entry Time:    "; printFormattedTime(target.entryTime); cout << "\n";
+    cout << "Exit Time:     "; printFormattedTime(exitTime); cout << "\n";
+    cout << "Billed Hours:  " << hours << " hour(s) (rounded up, min 1 hr)\n";
+    cout << "Total Fee:     $" << fee << "\n";
+    cout << "============================================\n";
 
     // Update revenue & history
     totalRevenue += fee;
@@ -680,7 +682,7 @@ void exitByPosition() {
         lot[i] = lot[i + 1];
     }
     lotCount--;
-    std::cout << "[Success] Vehicle exited. Slot " << target.slotNo << " is now free. Total Revenue: $"
+    cout << "[Success] Vehicle exited. Slot " << target.slotNo << " is now free. Total Revenue: $"
               << totalRevenue << "\n";
 }
 
@@ -688,7 +690,7 @@ void exitByPosition() {
 // Time Complexity: O(n) search + O(n) shifts = O(n)
 void exitByPlate() {
     if (lotCount == 0) {
-        std::cout << "\n[Error] Parking lot is empty. No vehicle to exit.\n";
+        cout << "\n[Error] Parking lot is empty. No vehicle to exit.\n";
         return;
     }
     char searchPlate[11];
@@ -697,7 +699,7 @@ void exitByPlate() {
     }
     int idx = findPlateIndex(lot, lotCount, searchPlate);
     if (idx == -1) {
-        std::cout << "\n[Error] Vehicle with plate " << searchPlate << " was not found in the lot.\n";
+        cout << "\n[Error] Vehicle with plate " << searchPlate << " was not found in the lot.\n";
         return;
     }
     Vehicle target = lot[idx];
@@ -708,25 +710,25 @@ void exitByPlate() {
     }
     int hours = 0, fee = 0;
     if (!calculateFee(target.entryTime, exitTime, target.type, hours, fee)) {
-        std::cout << "\n[Error] Exit time (";
+        cout << "\n[Error] Exit time (";
         printFormattedTime(exitTime);
-        std::cout << ") cannot be earlier than entry time (";
+        cout << ") cannot be earlier than entry time (";
         printFormattedTime(target.entryTime);
-        std::cout << "). Exit cancelled.\n";
+        cout << "). Exit cancelled.\n";
         return;
     }
 
-    std::cout << "\n============================================\n";
-    std::cout << "             PARKING RECEIPT\n";
-    std::cout << "============================================\n";
-    std::cout << "Plate:         " << target.plate << "\n";
-    std::cout << "Slot Number:   " << target.slotNo << "\n";
-    std::cout << "Vehicle Type:  " << getTypeName(target.type) << "\n";
-    std::cout << "Entry Time:    "; printFormattedTime(target.entryTime); std::cout << "\n";
-    std::cout << "Exit Time:     "; printFormattedTime(exitTime); std::cout << "\n";
-    std::cout << "Billed Hours:  " << hours << " hour(s) (rounded up, min 1 hr)\n";
-    std::cout << "Total Fee:     $" << fee << "\n";
-    std::cout << "============================================\n";
+    cout << "\n============================================\n";
+    cout << "             PARKING RECEIPT\n";
+    cout << "============================================\n";
+    cout << "Plate:         " << target.plate << "\n";
+    cout << "Slot Number:   " << target.slotNo << "\n";
+    cout << "Vehicle Type:  " << getTypeName(target.type) << "\n";
+    cout << "Entry Time:    "; printFormattedTime(target.entryTime); cout << "\n";
+    cout << "Exit Time:     "; printFormattedTime(exitTime); cout << "\n";
+    cout << "Billed Hours:  " << hours << " hour(s) (rounded up, min 1 hr)\n";
+    cout << "Total Fee:     $" << fee << "\n";
+    cout << "============================================\n";
 
     totalRevenue += fee;
     logExitHistory(target, exitTime, fee);
@@ -736,7 +738,7 @@ void exitByPlate() {
         lot[i] = lot[i + 1];
     }
     lotCount--;
-    std::cout << "[Success] Vehicle exited. Slot " << target.slotNo << " is now free. Total Revenue: $"
+    cout << "[Success] Vehicle exited. Slot " << target.slotNo << " is now free. Total Revenue: $"
               << totalRevenue << "\n";
 }
 
@@ -745,7 +747,7 @@ void exitByPlate() {
 // Time Complexity: O(n) single compaction pass (plus O(k * freeCount) slot releases for k swept vehicles).
 void closingSweep() {
     if (lotCount == 0) {
-        std::cout << "\n[Error] Parking lot is empty. Nothing to sweep.\n";
+        cout << "\n[Error] Parking lot is empty. Nothing to sweep.\n";
         return;
     }
     int sweepTime;
@@ -755,21 +757,21 @@ void closingSweep() {
     int writeIdx = 0;
     int removedCount = 0;
 
-    std::cout << "\n============================================================\n";
-    std::cout << "               CLOSING SWEEP REPORT\n";
-    std::cout << "Cutoff Time: "; printFormattedTime(sweepTime); std::cout << " (Vehicles entered strictly before cutoff)\n";
-    std::cout << "============================================================\n";
-    std::cout << "+------+------------+------------+---------+\n";
-    std::cout << "| Slot | Plate      | Entry Time | Type    |\n";
-    std::cout << "+------+------------+------------+---------+\n";
+    cout << "\n============================================================\n";
+    cout << "               CLOSING SWEEP REPORT\n";
+    cout << "Cutoff Time: "; printFormattedTime(sweepTime); cout << " (Vehicles entered strictly before cutoff)\n";
+    cout << "============================================================\n";
+    cout << "+------+------------+------------+---------+\n";
+    cout << "| Slot | Plate      | Entry Time | Type    |\n";
+    cout << "+------+------------+------------+---------+\n";
 
     for (int readIdx = 0; readIdx < lotCount; ++readIdx) {
         if (lot[readIdx].entryTime < sweepTime) {
-            std::cout << "| " << std::setw(4) << lot[readIdx].slotNo << " | "
-                      << std::left << std::setw(10) << lot[readIdx].plate << std::right << " | ";
+            cout << "| " << setw(4) << lot[readIdx].slotNo << " | "
+                      << left << setw(10) << lot[readIdx].plate << right << " | ";
             printFormattedTime(lot[readIdx].entryTime);
-            std::cout << "      | "
-                      << std::left << std::setw(7) << getTypeName(lot[readIdx].type) << std::right << " |\n";
+            cout << "      | "
+                      << left << setw(7) << getTypeName(lot[readIdx].type) << right << " |\n";
             releaseSlot(lot[readIdx].slotNo);
             removedCount++;
         } else {
@@ -778,9 +780,9 @@ void closingSweep() {
         }
     }
     lotCount = writeIdx;
-    std::cout << "+------+------------+------------+---------+\n";
-    std::cout << "Compaction complete. Total vehicles swept: " << removedCount << "\n";
-    std::cout << "Remaining vehicles in lot: " << lotCount << "\n";
+    cout << "+------+------------+------------+---------+\n";
+    cout << "Compaction complete. Total vehicles swept: " << removedCount << "\n";
+    cout << "Remaining vehicles in lot: " << lotCount << "\n";
 }
 
 // ----------------------------------------------------------------------------
@@ -791,7 +793,7 @@ void closingSweep() {
 // Time Complexity: O(n). Prints exact number of comparisons made.
 void linearSearchByPlate() {
     if (lotCount == 0) {
-        std::cout << "\n[Error] Parking lot is empty.\n";
+        cout << "\n[Error] Parking lot is empty.\n";
         return;
     }
     char target[11];
@@ -802,52 +804,52 @@ void linearSearchByPlate() {
     int foundIdx = -1;
     for (int i = 0; i < lotCount; ++i) {
         comparisons++;
-        if (std::strcmp(lot[i].plate, target) == 0) {
+        if (strcmp(lot[i].plate, target) == 0) {
             foundIdx = i;
             break;
         }
     }
-    std::cout << "\n--- Linear Search Result ---\n";
+    cout << "\n--- Linear Search Result ---\n";
     if (foundIdx != -1) {
-        std::cout << "Status:         FOUND\n";
-        std::cout << "Array Position: " << (foundIdx + 1) << "\n";
-        std::cout << "Slot Number:    " << lot[foundIdx].slotNo << "\n";
-        std::cout << "Plate:          " << lot[foundIdx].plate << "\n";
-        std::cout << "Entry Time:     "; printFormattedTime(lot[foundIdx].entryTime); std::cout << "\n";
-        std::cout << "Type:           " << getTypeName(lot[foundIdx].type) << "\n";
+        cout << "Status:         FOUND\n";
+        cout << "Array Position: " << (foundIdx + 1) << "\n";
+        cout << "Slot Number:    " << lot[foundIdx].slotNo << "\n";
+        cout << "Plate:          " << lot[foundIdx].plate << "\n";
+        cout << "Entry Time:     "; printFormattedTime(lot[foundIdx].entryTime); cout << "\n";
+        cout << "Type:           " << getTypeName(lot[foundIdx].type) << "\n";
     } else {
-        std::cout << "Status:         NOT FOUND\n";
-        std::cout << "Vehicle with plate " << target << " is not in the lot.\n";
+        cout << "Status:         NOT FOUND\n";
+        cout << "Vehicle with plate " << target << " is not in the lot.\n";
     }
-    std::cout << "Comparisons:    " << comparisons << "\n";
+    cout << "Comparisons:    " << comparisons << "\n";
 }
 
 // Task 3b - Binary search by plate with pre-condition check and failure demonstration option
 // Time Complexity: O(log n). Exactly 1 strcmp evaluated and counted per iteration.
 void binarySearchByPlate() {
     if (lotCount == 0) {
-        std::cout << "\n[Error] Parking lot is empty.\n";
+        cout << "\n[Error] Parking lot is empty.\n";
         return;
     }
     // Check if sorted
     bool sorted = isSortedByPlate(lot, lotCount);
     if (!sorted) {
-        std::cout << "\n============================================================\n";
-        std::cout << "  [WARNING] The parking lot array is NOT sorted by plate!\n";
-        std::cout << "  Binary search relies on sorted order. Searching now may\n";
-        std::cout << "  fail to find an existing record or produce wrong results.\n";
-        std::cout << "============================================================\n";
-        std::cout << "Options:\n";
-        std::cout << "  1. Sort by plate with Insertion Sort, then perform Binary Search\n";
-        std::cout << "  2. Run Binary Search anyway (to demonstrate failure on unsorted data)\n";
-        std::cout << "  0. Cancel\n";
+        cout << "\n============================================================\n";
+        cout << "  [WARNING] The parking lot array is NOT sorted by plate!\n";
+        cout << "  Binary search relies on sorted order. Searching now may\n";
+        cout << "  fail to find an existing record or produce wrong results.\n";
+        cout << "============================================================\n";
+        cout << "Options:\n";
+        cout << "  1. Sort by plate with Insertion Sort, then perform Binary Search\n";
+        cout << "  2. Run Binary Search anyway (to demonstrate failure on unsorted data)\n";
+        cout << "  0. Cancel\n";
         int opt = readInt("Enter choice (0-2): ", 0, 2);
         if (opt == 1) {
             insertionSortByPlate(lot, lotCount, true);
         } else if (opt == 2) {
-            std::cout << "[Proceeding with Binary Search on unsorted array]\n";
+            cout << "[Proceeding with Binary Search on unsorted array]\n";
         } else {
-            std::cout << "Search cancelled.\n";
+            cout << "Search cancelled.\n";
             return;
         }
     }
@@ -866,7 +868,7 @@ void binarySearchByPlate() {
         int mid = low + (high - low) / 2;
         comparisons++;
         // Single strcmp stored in variable to strictly count 1 comparison per iteration
-        int cmp = std::strcmp(target, lot[mid].plate);
+        int cmp = strcmp(target, lot[mid].plate);
         if (cmp == 0) {
             foundIdx = mid;
             break;
@@ -877,68 +879,68 @@ void binarySearchByPlate() {
         }
     }
 
-    std::cout << "\n--- Binary Search Result ---\n";
+    cout << "\n--- Binary Search Result ---\n";
     if (foundIdx != -1) {
-        std::cout << "Status:         FOUND\n";
-        std::cout << "Array Position: " << (foundIdx + 1) << "\n";
-        std::cout << "Slot Number:    " << lot[foundIdx].slotNo << "\n";
-        std::cout << "Plate:          " << lot[foundIdx].plate << "\n";
-        std::cout << "Entry Time:     "; printFormattedTime(lot[foundIdx].entryTime); std::cout << "\n";
-        std::cout << "Type:           " << getTypeName(lot[foundIdx].type) << "\n";
+        cout << "Status:         FOUND\n";
+        cout << "Array Position: " << (foundIdx + 1) << "\n";
+        cout << "Slot Number:    " << lot[foundIdx].slotNo << "\n";
+        cout << "Plate:          " << lot[foundIdx].plate << "\n";
+        cout << "Entry Time:     "; printFormattedTime(lot[foundIdx].entryTime); cout << "\n";
+        cout << "Type:           " << getTypeName(lot[foundIdx].type) << "\n";
     } else {
-        std::cout << "Status:         NOT FOUND\n";
-        std::cout << "Vehicle with plate " << target << " was not found.\n";
+        cout << "Status:         NOT FOUND\n";
+        cout << "Vehicle with plate " << target << " was not found.\n";
         if (!sorted) {
-            std::cout << "Note: Array was unsorted during this search, demonstrating binary search failure!\n";
+            cout << "Note: Array was unsorted during this search, demonstrating binary search failure!\n";
         }
     }
-    std::cout << "Comparisons:    " << comparisons << "\n";
+    cout << "Comparisons:    " << comparisons << "\n";
 }
 
 // Task 3c - Find all vehicles of a given type
 // Time Complexity: O(n). Comparisons counted.
 void searchVehiclesByType() {
     if (lotCount == 0) {
-        std::cout << "\n[Error] Parking lot is empty.\n";
+        cout << "\n[Error] Parking lot is empty.\n";
         return;
     }
-    std::cout << "\nSelect vehicle type to search:\n";
-    std::cout << "  1. Bike\n";
-    std::cout << "  2. Car\n";
-    std::cout << "  3. Truck\n";
+    cout << "\nSelect vehicle type to search:\n";
+    cout << "  1. Bike\n";
+    cout << "  2. Car\n";
+    cout << "  3. Truck\n";
     int targetType = readInt("Enter type (1-3): ", 1, 3);
 
     int comparisons = 0;
     int matchCount = 0;
 
-    std::cout << "\n============================================================\n";
-    std::cout << "       VEHICLES OF TYPE: " << getTypeName(targetType) << "\n";
-    std::cout << "============================================================\n";
-    std::cout << "+-----+------+------------+------------+\n";
-    std::cout << "| Pos | Slot | Plate      | Entry Time |\n";
-    std::cout << "+-----+------+------------+------------+\n";
+    cout << "\n============================================================\n";
+    cout << "       VEHICLES OF TYPE: " << getTypeName(targetType) << "\n";
+    cout << "============================================================\n";
+    cout << "+-----+------+------------+------------+\n";
+    cout << "| Pos | Slot | Plate      | Entry Time |\n";
+    cout << "+-----+------+------------+------------+\n";
 
     for (int i = 0; i < lotCount; ++i) {
         comparisons++;
         if (lot[i].type == targetType) {
             matchCount++;
-            std::cout << "| " << std::setw(3) << (i + 1) << " | "
-                      << std::setw(4) << lot[i].slotNo << " | "
-                      << std::left << std::setw(10) << lot[i].plate << std::right << " | ";
+            cout << "| " << setw(3) << (i + 1) << " | "
+                      << setw(4) << lot[i].slotNo << " | "
+                      << left << setw(10) << lot[i].plate << right << " | ";
             printFormattedTime(lot[i].entryTime);
-            std::cout << "      |\n";
+            cout << "      |\n";
         }
     }
-    std::cout << "+-----+------+------------+------------+\n";
-    std::cout << "Total matches found: " << matchCount << " / " << lotCount << " vehicles\n";
-    std::cout << "Comparisons:         " << comparisons << "\n";
+    cout << "+-----+------+------------+------------+\n";
+    cout << "Total matches found: " << matchCount << " / " << lotCount << " vehicles\n";
+    cout << "Comparisons:         " << comparisons << "\n";
 }
 
 // Task 3d - Find the longest-parked vehicle (earliest entry time; reports all ties)
 // Time Complexity: O(n). Comparisons counted.
 void findLongestParked() {
     if (lotCount == 0) {
-        std::cout << "\n[Error] Parking lot is empty.\n";
+        cout << "\n[Error] Parking lot is empty.\n";
         return;
     }
     int currentTime;
@@ -956,11 +958,11 @@ void findLongestParked() {
 
     int currentMin = timeToMinutes(currentTime);
 
-    std::cout << "\n============================================================\n";
-    std::cout << "             LONGEST PARKED VEHICLE(S)\n";
-    std::cout << "Current Time: "; printFormattedTime(currentTime);
-    std::cout << " | Earliest Entry: "; printFormattedTime(minTime); std::cout << "\n";
-    std::cout << "============================================================\n";
+    cout << "\n============================================================\n";
+    cout << "             LONGEST PARKED VEHICLE(S)\n";
+    cout << "Current Time: "; printFormattedTime(currentTime);
+    cout << " | Earliest Entry: "; printFormattedTime(minTime); cout << "\n";
+    cout << "============================================================\n";
 
     int tieCount = 0;
     for (int i = 0; i < lotCount; ++i) {
@@ -972,17 +974,17 @@ void findLongestParked() {
             int durH = diffMin / 60;
             int durM = diffMin % 60;
 
-            std::cout << "Record #" << tieCount << ":\n";
-            std::cout << "  Array Position: " << (i + 1) << "\n";
-            std::cout << "  Slot Number:    " << lot[i].slotNo << "\n";
-            std::cout << "  Plate:          " << lot[i].plate << "\n";
-            std::cout << "  Vehicle Type:   " << getTypeName(lot[i].type) << "\n";
-            std::cout << "  Entry Time:     "; printFormattedTime(lot[i].entryTime); std::cout << "\n";
-            std::cout << "  Duration:       " << durH << " hours " << durM << " minutes\n";
-            std::cout << "--------------------------------------------\n";
+            cout << "Record #" << tieCount << ":\n";
+            cout << "  Array Position: " << (i + 1) << "\n";
+            cout << "  Slot Number:    " << lot[i].slotNo << "\n";
+            cout << "  Plate:          " << lot[i].plate << "\n";
+            cout << "  Vehicle Type:   " << getTypeName(lot[i].type) << "\n";
+            cout << "  Entry Time:     "; printFormattedTime(lot[i].entryTime); cout << "\n";
+            cout << "  Duration:       " << durH << " hours " << durM << " minutes\n";
+            cout << "--------------------------------------------\n";
         }
     }
-    std::cout << "Comparisons: " << comparisons << "\n";
+    cout << "Comparisons: " << comparisons << "\n";
 }
 
 // ----------------------------------------------------------------------------
@@ -993,7 +995,7 @@ void findLongestParked() {
 // Time Complexity: O(n) search
 void previewFee() {
     if (lotCount == 0) {
-        std::cout << "\n[Error] Parking lot is empty.\n";
+        cout << "\n[Error] Parking lot is empty.\n";
         return;
     }
     char target[11];
@@ -1002,7 +1004,7 @@ void previewFee() {
     }
     int idx = findPlateIndex(lot, lotCount, target);
     if (idx == -1) {
-        std::cout << "\n[Error] Vehicle with plate " << target << " was not found.\n";
+        cout << "\n[Error] Vehicle with plate " << target << " was not found.\n";
         return;
     }
     int simExitTime;
@@ -1011,25 +1013,25 @@ void previewFee() {
     }
     int hours = 0, fee = 0;
     if (!calculateFee(lot[idx].entryTime, simExitTime, lot[idx].type, hours, fee)) {
-        std::cout << "\n[Error] Preview exit time (";
+        cout << "\n[Error] Preview exit time (";
         printFormattedTime(simExitTime);
-        std::cout << ") cannot be earlier than entry time (";
+        cout << ") cannot be earlier than entry time (";
         printFormattedTime(lot[idx].entryTime);
-        std::cout << ").\n";
+        cout << ").\n";
         return;
     }
-    std::cout << "\n============================================\n";
-    std::cout << "              FEE PREVIEW\n";
-    std::cout << "============================================\n";
-    std::cout << "Plate:            " << lot[idx].plate << "\n";
-    std::cout << "Slot Number:      " << lot[idx].slotNo << "\n";
-    std::cout << "Type:             " << getTypeName(lot[idx].type) << "\n";
-    std::cout << "Entry Time:       "; printFormattedTime(lot[idx].entryTime); std::cout << "\n";
-    std::cout << "Preview Exit:     "; printFormattedTime(simExitTime); std::cout << "\n";
-    std::cout << "Calculated Hours: " << hours << " hr(s) (rounded up, min 1 hr)\n";
-    std::cout << "Estimated Fee:    $" << fee << "\n";
-    std::cout << "Note: This is a preview. Vehicle remains parked.\n";
-    std::cout << "============================================\n";
+    cout << "\n============================================\n";
+    cout << "              FEE PREVIEW\n";
+    cout << "============================================\n";
+    cout << "Plate:            " << lot[idx].plate << "\n";
+    cout << "Slot Number:      " << lot[idx].slotNo << "\n";
+    cout << "Type:             " << getTypeName(lot[idx].type) << "\n";
+    cout << "Entry Time:       "; printFormattedTime(lot[idx].entryTime); cout << "\n";
+    cout << "Preview Exit:     "; printFormattedTime(simExitTime); cout << "\n";
+    cout << "Calculated Hours: " << hours << " hr(s) (rounded up, min 1 hr)\n";
+    cout << "Estimated Fee:    $" << fee << "\n";
+    cout << "Note: This is a preview. Vehicle remains parked.\n";
+    cout << "============================================\n";
 }
 
 // ----------------------------------------------------------------------------
@@ -1041,17 +1043,17 @@ void previewFee() {
 void initLevel2() {
     level2Count = 5;
     // Slot 101-105 for Level 2
-    level2[0].slotNo = 101; std::strcpy(level2[0].plate, "UP14JK"); level2[0].entryTime = 830;  level2[0].type = 2;
-    level2[1].slotNo = 102; std::strcpy(level2[1].plate, "RJ14LM"); level2[1].entryTime = 915;  level2[1].type = 1;
-    level2[2].slotNo = 103; std::strcpy(level2[2].plate, "HR26NP"); level2[2].entryTime = 1045; level2[2].type = 3;
-    level2[3].slotNo = 104; std::strcpy(level2[3].plate, "WB02QR"); level2[3].entryTime = 1100; level2[3].type = 2;
-    level2[4].slotNo = 105; std::strcpy(level2[4].plate, "AP09ST"); level2[4].entryTime = 1215; level2[4].type = 1;
+    level2[0].slotNo = 101; strcpy(level2[0].plate, "UP14JK"); level2[0].entryTime = 830;  level2[0].type = 2;
+    level2[1].slotNo = 102; strcpy(level2[1].plate, "RJ14LM"); level2[1].entryTime = 915;  level2[1].type = 1;
+    level2[2].slotNo = 103; strcpy(level2[2].plate, "HR26NP"); level2[2].entryTime = 1045; level2[2].type = 3;
+    level2[3].slotNo = 104; strcpy(level2[3].plate, "WB02QR"); level2[3].entryTime = 1100; level2[3].type = 2;
+    level2[4].slotNo = 105; strcpy(level2[4].plate, "AP09ST"); level2[4].entryTime = 1215; level2[4].type = 1;
 }
 
 // Bonus 2 - Two-pointer merge of Level 1 and Level 2 sorted by plate
 // Time Complexity: O(n1 log n1 + n2 log n2) for sorting + O(n1 + n2) merge
 void mergeTwoLevels() {
-    std::cout << "\n[Bonus 2] Merging Level 1 (Main Lot) and Level 2 by License Plate\n";
+    cout << "\n[Bonus 2] Merging Level 1 (Main Lot) and Level 2 by License Plate\n";
 
     // 1. Sort both arrays by plate with Insertion Sort
     insertionSortByPlate(lot, lotCount, false);
@@ -1067,14 +1069,14 @@ void mergeTwoLevels() {
 
     while (p1 < lotCount && p2 < level2Count) {
         comparisons++;
-        int cmp = std::strcmp(lot[p1].plate, level2[p2].plate);
+        int cmp = strcmp(lot[p1].plate, level2[p2].plate);
         if (cmp < 0) {
             merged[mergedCount++] = lot[p1++];
         } else if (cmp > 0) {
             merged[mergedCount++] = level2[p2++];
         } else {
             // Duplicate plate across levels: keep Level 1 record, skip duplicate Level 2
-            std::cout << "  [Warning] Duplicate plate '" << lot[p1].plate
+            cout << "  [Warning] Duplicate plate '" << lot[p1].plate
                       << "' found in both levels. Level 2 duplicate skipped.\n";
             merged[mergedCount++] = lot[p1++];
             p2++;
@@ -1089,24 +1091,24 @@ void mergeTwoLevels() {
     }
 
     // Display merged results
-    std::cout << "\n============================================================\n";
-    std::cout << "          MERGED MULTI-LEVEL PARKING LOT (BY PLATE)\n";
-    std::cout << "============================================================\n";
-    std::cout << "+-----+------+------------+------------+---------+\n";
-    std::cout << "| Pos | Slot | Plate      | Entry Time | Type    |\n";
-    std::cout << "+-----+------+------------+------------+---------+\n";
+    cout << "\n============================================================\n";
+    cout << "          MERGED MULTI-LEVEL PARKING LOT (BY PLATE)\n";
+    cout << "============================================================\n";
+    cout << "+-----+------+------------+------------+---------+\n";
+    cout << "| Pos | Slot | Plate      | Entry Time | Type    |\n";
+    cout << "+-----+------+------------+------------+---------+\n";
     for (int i = 0; i < mergedCount; ++i) {
-        std::cout << "| " << std::setw(3) << (i + 1) << " | "
-                  << std::setw(4) << merged[i].slotNo << " | "
-                  << std::left << std::setw(10) << merged[i].plate << std::right << " | ";
+        cout << "| " << setw(3) << (i + 1) << " | "
+                  << setw(4) << merged[i].slotNo << " | "
+                  << left << setw(10) << merged[i].plate << right << " | ";
         printFormattedTime(merged[i].entryTime);
-        std::cout << "      | "
-                  << std::left << std::setw(7) << getTypeName(merged[i].type) << std::right << " |\n";
+        cout << "      | "
+                  << left << setw(7) << getTypeName(merged[i].type) << right << " |\n";
     }
-    std::cout << "+-----+------+------------+------------+---------+\n";
-    std::cout << "Total merged vehicles:   " << mergedCount << "\n";
-    std::cout << "Skipped duplicates:      " << skippedDuplicates << "\n";
-    std::cout << "Merge comparisons made:  " << comparisons << "\n";
+    cout << "+-----+------+------------+------------+---------+\n";
+    cout << "Total merged vehicles:   " << mergedCount << "\n";
+    cout << "Skipped duplicates:      " << skippedDuplicates << "\n";
+    cout << "Merge comparisons made:  " << comparisons << "\n";
 }
 
 // ----------------------------------------------------------------------------
@@ -1158,32 +1160,32 @@ void peakOccupancyByHour() {
         }
     }
 
-    std::cout << "\n============================================================\n";
-    std::cout << "            PEAK OCCUPANCY ANALYSIS BY HOUR\n";
-    std::cout << "============================================================\n";
-    std::cout << "Hour  Time Window    Vehicles  Distribution Graph\n";
-    std::cout << "------------------------------------------------------------\n";
+    cout << "\n============================================================\n";
+    cout << "            PEAK OCCUPANCY ANALYSIS BY HOUR\n";
+    cout << "============================================================\n";
+    cout << "Hour  Time Window    Vehicles  Distribution Graph\n";
+    cout << "------------------------------------------------------------\n";
     for (int h = 0; h < 24; ++h) {
-        std::cout << std::setw(2) << std::setfill('0') << h << ":00-"
-                  << std::setw(2) << std::setfill('0') << h << ":59  "
-                  << std::setfill(' ') << std::setw(3) << hourlyCount[h] << "   ";
+        cout << setw(2) << setfill('0') << h << ":00-"
+                  << setw(2) << setfill('0') << h << ":59  "
+                  << setfill(' ') << setw(3) << hourlyCount[h] << "   ";
         for (int b = 0; b < hourlyCount[h]; ++b) {
-            std::cout << '*';
+            cout << '*';
         }
-        std::cout << "\n";
+        cout << "\n";
     }
-    std::cout << "------------------------------------------------------------\n";
-    std::cout << "Peak Occupancy Count: " << peakCount << " vehicle(s)\n";
-    std::cout << "Peak Hour(s): ";
+    cout << "------------------------------------------------------------\n";
+    cout << "Peak Occupancy Count: " << peakCount << " vehicle(s)\n";
+    cout << "Peak Hour(s): ";
     bool first = true;
     for (int h = 0; h < 24; ++h) {
         if (hourlyCount[h] == peakCount && peakCount > 0) {
-            if (!first) std::cout << ", ";
-            std::cout << std::setw(2) << std::setfill('0') << h << ":00";
+            if (!first) cout << ", ";
+            cout << setw(2) << setfill('0') << h << ":00";
             first = false;
         }
     }
-    std::cout << std::setfill(' ') << "\n";
+    cout << setfill(' ') << "\n";
 }
 
 // ----------------------------------------------------------------------------
@@ -1193,9 +1195,9 @@ void peakOccupancyByHour() {
 // Testing Helper - Auto-fills the lot to 60 vehicles with unique dummy plates
 // Time Complexity: O(remaining * freeCount)
 void autoFillLotForTesting() {
-    std::cout << "\n[TESTING HELPER] Auto-filling lot to 60 vehicles...\n";
+    cout << "\n[TESTING HELPER] Auto-filling lot to 60 vehicles...\n";
     if (lotCount >= MAX_LOT) {
-        std::cout << "Lot is already full (60/60 occupied)!\n";
+        cout << "Lot is already full (60/60 occupied)!\n";
         return;
     }
     int initialCount = lotCount;
@@ -1216,7 +1218,7 @@ void autoFillLotForTesting() {
             int slot = allocateLowestSlot();
             if (slot == -1) break;
             lot[lotCount].slotNo = slot;
-            std::strcpy(lot[lotCount].plate, dummyPlate);
+            strcpy(lot[lotCount].plate, dummyPlate);
             // Valid staggered entry times: 0800, 0815, 0830, 0845, 0900, etc.
             int hh = 8 + (dummyIndex / 4);
             if (hh > 22) hh = 22;
@@ -1227,7 +1229,7 @@ void autoFillLotForTesting() {
         }
         dummyIndex++;
     }
-    std::cout << "[TESTING HELPER] Successfully added " << (lotCount - initialCount)
+    cout << "[TESTING HELPER] Successfully added " << (lotCount - initialCount)
               << " test vehicles. Lot is now at full capacity (60/60 occupied).\n";
 }
 
@@ -1237,12 +1239,12 @@ void autoFillLotForTesting() {
 
 void parkSubmenu() {
     while (true) {
-        std::cout << "\n--- 2. PARK VEHICLE SUBMENU ---\n";
-        std::cout << "  1. Park at next free position (end of array)\n";
-        std::cout << "  2. Park VIP / Reserved vehicle at FRONT (position 1)\n";
-        std::cout << "  3. Park at user-chosen position\n";
-        std::cout << "  4. Park while maintaining sorted order by plate\n";
-        std::cout << "  0. Back to Main Menu\n";
+        cout << "\n--- 2. PARK VEHICLE SUBMENU ---\n";
+        cout << "  1. Park at next free position (end of array)\n";
+        cout << "  2. Park VIP / Reserved vehicle at FRONT (position 1)\n";
+        cout << "  3. Park at user-chosen position\n";
+        cout << "  4. Park while maintaining sorted order by plate\n";
+        cout << "  0. Back to Main Menu\n";
         int choice = readInt("Enter choice (0-4): ", 0, 4);
         if (choice == 1) parkAtEnd();
         else if (choice == 2) parkAtFrontVIP();
@@ -1254,11 +1256,11 @@ void parkSubmenu() {
 
 void exitSubmenu() {
     while (true) {
-        std::cout << "\n--- 3. EXIT VEHICLE SUBMENU ---\n";
-        std::cout << "  1. Exit by array position (1..count)\n";
-        std::cout << "  2. Exit by license plate number\n";
-        std::cout << "  3. Closing sweep (remove vehicles entered before cutoff time)\n";
-        std::cout << "  0. Back to Main Menu\n";
+        cout << "\n--- 3. EXIT VEHICLE SUBMENU ---\n";
+        cout << "  1. Exit by array position (1..count)\n";
+        cout << "  2. Exit by license plate number\n";
+        cout << "  3. Closing sweep (remove vehicles entered before cutoff time)\n";
+        cout << "  0. Back to Main Menu\n";
         int choice = readInt("Enter choice (0-3): ", 0, 3);
         if (choice == 1) exitByPosition();
         else if (choice == 2) exitByPlate();
@@ -1269,12 +1271,12 @@ void exitSubmenu() {
 
 void searchSubmenu() {
     while (true) {
-        std::cout << "\n--- 4. SEARCH VEHICLE SUBMENU ---\n";
-        std::cout << "  1. Linear search by license plate (lost-car query)\n";
-        std::cout << "  2. Binary search by license plate (precondition checked)\n";
-        std::cout << "  3. Find all vehicles of a given type\n";
-        std::cout << "  4. Find longest-parked vehicle(s)\n";
-        std::cout << "  0. Back to Main Menu\n";
+        cout << "\n--- 4. SEARCH VEHICLE SUBMENU ---\n";
+        cout << "  1. Linear search by license plate (lost-car query)\n";
+        cout << "  2. Binary search by license plate (precondition checked)\n";
+        cout << "  3. Find all vehicles of a given type\n";
+        cout << "  4. Find longest-parked vehicle(s)\n";
+        cout << "  0. Back to Main Menu\n";
         int choice = readInt("Enter choice (0-4): ", 0, 4);
         if (choice == 1) linearSearchByPlate();
         else if (choice == 2) binarySearchByPlate();
@@ -1286,11 +1288,11 @@ void searchSubmenu() {
 
 void sortSubmenu() {
     while (true) {
-        std::cout << "\n--- 5. SORT LOT SUBMENU ---\n";
-        std::cout << "  1. Insertion Sort by license plate (A-Z)\n";
-        std::cout << "  2. Selection Sort by entry time (Earliest first)\n";
-        std::cout << "  3. Stable Bubble Sort by type then entry time (with stability check)\n";
-        std::cout << "  0. Back to Main Menu\n";
+        cout << "\n--- 5. SORT LOT SUBMENU ---\n";
+        cout << "  1. Insertion Sort by license plate (A-Z)\n";
+        cout << "  2. Selection Sort by entry time (Earliest first)\n";
+        cout << "  3. Stable Bubble Sort by type then entry time (with stability check)\n";
+        cout << "  0. Back to Main Menu\n";
         int choice = readInt("Enter choice (0-3): ", 0, 3);
         if (choice == 1) insertionSortByPlate(lot, lotCount, true);
         else if (choice == 2) selectionSortByEntryTime(lot, lotCount);
@@ -1301,27 +1303,27 @@ void sortSubmenu() {
 
 void feesSubmenu() {
     while (true) {
-        std::cout << "\n--- 6. FEES & REVENUE SUBMENU ---\n";
-        std::cout << "  1. Preview parking fee for a parked plate (no removal)\n";
-        std::cout << "  2. View total revenue collected so far\n";
-        std::cout << "  0. Back to Main Menu\n";
+        cout << "\n--- 6. FEES & REVENUE SUBMENU ---\n";
+        cout << "  1. Preview parking fee for a parked plate (no removal)\n";
+        cout << "  2. View total revenue collected so far\n";
+        cout << "  0. Back to Main Menu\n";
         int choice = readInt("Enter choice (0-2): ", 0, 2);
         if (choice == 1) previewFee();
         else if (choice == 2) {
-            std::cout << "\n============================================\n";
-            std::cout << "  Total Revenue Collected: $" << totalRevenue << "\n";
-            std::cout << "============================================\n";
+            cout << "\n============================================\n";
+            cout << "  Total Revenue Collected: $" << totalRevenue << "\n";
+            cout << "============================================\n";
         } else if (choice == 0) break;
     }
 }
 
 void bonusSubmenu() {
     while (true) {
-        std::cout << "\n--- 7. BONUS FEATURES SUBMENU ---\n";
-        std::cout << "  1. Bonus 1: Show available free slot numbers (lowest allocator)\n";
-        std::cout << "  2. Bonus 2: Merge Level 1 and Level 2 parking lots\n";
-        std::cout << "  3. Bonus 3: Peak occupancy analysis by hour\n";
-        std::cout << "  0. Back to Main Menu\n";
+        cout << "\n--- 7. BONUS FEATURES SUBMENU ---\n";
+        cout << "  1. Bonus 1: Show available free slot numbers (lowest allocator)\n";
+        cout << "  2. Bonus 2: Merge Level 1 and Level 2 parking lots\n";
+        cout << "  3. Bonus 3: Peak occupancy analysis by hour\n";
+        cout << "  0. Back to Main Menu\n";
         int choice = readInt("Enter choice (0-3): ", 0, 3);
         if (choice == 1) showFreeSlots();
         else if (choice == 2) mergeTwoLevels();
@@ -1342,10 +1344,10 @@ void bonusSubmenu() {
 // Time Complexity: O(1)
 void initLot() {
     lotCount = 4;
-    lot[0].slotNo = 1; std::strcpy(lot[0].plate, "MH12AB"); lot[0].entryTime = 1000; lot[0].type = 2;
-    lot[1].slotNo = 2; std::strcpy(lot[1].plate, "DL08CD"); lot[1].entryTime = 900;  lot[1].type = 1;
-    lot[2].slotNo = 3; std::strcpy(lot[2].plate, "KA05EF"); lot[2].entryTime = 1130; lot[2].type = 3;
-    lot[3].slotNo = 4; std::strcpy(lot[3].plate, "TN09GH"); lot[3].entryTime = 945;  lot[3].type = 2;
+    lot[0].slotNo = 1; strcpy(lot[0].plate, "MH12AB"); lot[0].entryTime = 1000; lot[0].type = 2;
+    lot[1].slotNo = 2; strcpy(lot[1].plate, "DL08CD"); lot[1].entryTime = 900;  lot[1].type = 1;
+    lot[2].slotNo = 3; strcpy(lot[2].plate, "KA05EF"); lot[2].entryTime = 1130; lot[2].type = 3;
+    lot[3].slotNo = 4; strcpy(lot[3].plate, "TN09GH"); lot[3].entryTime = 945;  lot[3].type = 2;
 
     // Remaining slots 5 to 60 are free initially
     freeCount = MAX_LOT - lotCount;
@@ -1362,23 +1364,23 @@ void initLot() {
 int main() {
     // Initial banner display
     printBanner();
-    std::cout << "System initialized with 4 sample vehicles in slots 1 to 4.\n";
+    cout << "System initialized with 4 sample vehicles in slots 1 to 4.\n";
 
     initLot();
 
     while (true) {
         // Banner printed above main menu every time it is displayed
         printBanner();
-        std::cout << "MAIN MENU:\n";
-        std::cout << "  1. Show Lot\n";
-        std::cout << "  2. Park Vehicle\n";
-        std::cout << "  3. Exit Vehicle\n";
-        std::cout << "  4. Search\n";
-        std::cout << "  5. Sort\n";
-        std::cout << "  6. Fees & Revenue\n";
-        std::cout << "  7. Bonus Features\n";
-        std::cout << "  8. Testing Helper (Auto-fill lot to 60)\n";
-        std::cout << "  0. Quit\n";
+        cout << "MAIN MENU:\n";
+        cout << "  1. Show Lot\n";
+        cout << "  2. Park Vehicle\n";
+        cout << "  3. Exit Vehicle\n";
+        cout << "  4. Search\n";
+        cout << "  5. Sort\n";
+        cout << "  6. Fees & Revenue\n";
+        cout << "  7. Bonus Features\n";
+        cout << "  8. Testing Helper (Auto-fill lot to 60)\n";
+        cout << "  0. Quit\n";
 
         int choice = readInt("Select an option (0-8): ", 0, 8);
 
@@ -1399,7 +1401,7 @@ int main() {
         } else if (choice == 8) {
             autoFillLotForTesting();
         } else if (choice == 0) {
-            std::cout << "\nThank you for using Smart Parking Lot Manager. Goodbye!\n";
+            cout << "\nThank you for using Smart Parking Lot Manager. Goodbye!\n";
             break;
         }
     }
